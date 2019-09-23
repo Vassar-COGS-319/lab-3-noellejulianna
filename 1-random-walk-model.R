@@ -2,7 +2,7 @@
 # the model should return a data frame with two columns: correct and rt
 # the correct column should be TRUE or FALSE, and rt should contain the
 # number of steps it took to reach the criterion.
-
+library(dplyr)
 # note that the function takes four arguments:
 # samples is the number of samples to draw from the model
 # drift is the drift rate (default value is 0)
@@ -10,13 +10,24 @@
 # criterion is the threshold for a response (default value is 3)
 
 random.walk.model <- function(samples, drift=0, sdrw=0.3, criterion=3){
+  accuracy.array <- vector()
+  rt.array <- vector()
   
-  output <- data.frame(
-    correct = accuracy.array,
-    rt = rt.array
-  )
-  
-  return(output)
+  for(i in 1:samples){
+    miliCount <- 0
+    es <- 0
+    while(abs(es) <= criterion){
+      es <- es + rnorm(1, mean=drift, sd=sdrw)
+      miliCount <- miliCount + 1
+    }
+    accuracy.array[i] <- if_else(es > 0, TRUE, FALSE)
+    rt.array[i] <- miliCount
+  }
+    output <- data.frame(
+      correct = accuracy.array,
+      rt = rt.array
+    )
+    return(output)
 }
 
 # test the model ####
@@ -39,4 +50,4 @@ correct.data <- initial.test %>% filter(correct==TRUE)
 incorrect.data <- initial.test %>% filter(correct==FALSE)
 
 hist(correct.data$rt)
-hist(incorrect.data$rt)
+hist(incorrect.data$rt, xlab = 'Incorrect Data Response Time')

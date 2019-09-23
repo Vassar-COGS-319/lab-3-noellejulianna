@@ -8,15 +8,29 @@
 # rate.1 is the evidence accumulation rate for the correct response (default value is 40)
 # rate.1 is the evidence accumulation rate for the incorrect response (default value is 40)
 # criterion is the threshold for a response (default value is 3)
-
+library(dplyr)
 # one oddity: note that higher values for rate.1 and rate.2 will actually produce slower RTs.
 # this is because the rate parameter is controlling the rate of decay of the exponential distribution,
 # so faster rates mean that less evidence is likely to accumulate on each step. we could make
 # these parameters more intuitive by taking 1/rate.1 and 1/rate.2 as the values to rexp().
 
 accumulator.model <- function(samples, rate.1=40, rate.2=40, criterion=3){
+  accuracy.array <- vector()
+  rt.array <- vector()
   
-
+  for(i in 1:samples){
+    esP <- 0 
+    esN <- 0 
+    miliCount <- 0
+    while(esN <= criterion & esP <= criterion){
+      esP <- esP + rexp(1, rate.1)
+      esN <- esN + rexp(1, rate.2)
+      miliCount <- miliCount + 1
+    }
+    accuracy.array[i] <- if_else(esP > esN, T, F)
+    rt.array[i] <- miliCount
+  }
+  
   output <- data.frame(
     correct = accuracy.array,
     rt = rt.array
@@ -45,4 +59,4 @@ correct.data <- initial.test %>% filter(correct==TRUE)
 incorrect.data <- initial.test %>% filter(correct==FALSE)
 
 hist(correct.data$rt)
-hist(incorrect.data$rt)
+hist(incorrect.data$rt, xlab = 'Incoreect Data Reaction Time')
