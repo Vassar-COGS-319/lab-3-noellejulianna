@@ -69,5 +69,5 @@ par(mfrow=c(1,1))
 # Based on the comparison of these histograms, it seems that the Accumulator Model produces more consistent
 # results, keeping it within a tighter range of possible outcomes, whereas the Random Walk Model produces more
 # extreme outcomes. This is likely a result of its randomness, making it possible for such extreme cases.
-# So if the user's intent was to 
-# 
+# Of course this judgement also depends on the intent of the person using it, whether they need
+# an estimate of the most likely outcomes or a record of every single possible outcome, even the most extreme ones.
