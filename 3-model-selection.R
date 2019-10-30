@@ -59,15 +59,15 @@ mean(accum.incorrect.rt) # should be about 246 ms
 correct.data <- rand.test %>% filter(correct==TRUE)
 incorrect.data <- initial.test %>% filter(correct==FALSE)
 
-par(mfrow=c(2,2))
+layout(matrix(1:4, nrow=2, byrow=T))
 hist(rand.correct.rt, main = 'Random Walk Model - Correct', xlab = 'Correct Mean Reaction Time')
 hist(rand.incorrect.rt, main = 'Random Walk Model - Incorrect', xlab = 'Incorrect Mean Reaction Time')
 hist(accum.correct.rt, main = 'Accumulator Model - Correct', xlab = 'Correct Mean Reaction Time')
 hist(accum.incorrect.rt, main = 'Accumulator Model - Incorrect', xlab = 'Incorrect Mean Reaction Time')
-par(mfrow=c(1,1))
 
 # Based on the comparison of these histograms, it seems that the Accumulator Model produces more consistent
 # results, keeping it within a tighter range of possible outcomes, whereas the Random Walk Model produces more
 # extreme outcomes. This is likely a result of its randomness, making it possible for such extreme cases.
 # Of course this judgement also depends on the intent of the person using it, whether they need
 # an estimate of the most likely outcomes or a record of every single possible outcome, even the most extreme ones.
+# The Random Walk model also tends to be more right skewed than the Accumulator Model
